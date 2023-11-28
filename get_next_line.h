@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:15:41 by aghergho          #+#    #+#             */
-/*   Updated: 2023/11/26 15:25:50 by ddos             ###   ########.fr       */
+/*   Updated: 2023/11/28 09:47:26 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <string.h>
 
 char *get_next_line(int fd);
 typedef struct	get_next_line
 {
 	char					*content;
-	// int						fd;
 	struct get_next_line	*next;
 }   g_next;
 

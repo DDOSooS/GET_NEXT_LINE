@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:24:07 by aghergho          #+#    #+#             */
-/*   Updated: 2023/11/26 19:43:51 by ddos             ###   ########.fr       */
+/*   Updated: 2023/11/28 19:44:25 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 
 static g_next   *g_line; 
 
+static g_next	*ft_lstnew(char *str)
+{
+	g_next	*new;
+
+	new = malloc (sizeof(g_next));
+	if (!new)
+		return(NULL);
+	new->content = str;
+	new->next = NULL;
+	return (new);
+}
 
 static void	ft_del_head()
 {
@@ -30,8 +41,10 @@ static void	ft_del_head()
 
 static void	ft_lstclear()
 {
-	g_line	*lst;
+	g_next	*lst;
 	
+	if (!g_line)
+		return ;
 	lst = g_line;
 	while(g_line->next)
 	{
@@ -43,54 +56,141 @@ static void	ft_lstclear()
 	g_line = NULL;
 }
 
-static int	ft_lstadd_back(g_next new)
+static void	ft_lstadd_back(g_next *new)
 {
 	g_next	*temp;
-	int		endline;
 	
-	endline = ft_strchr(new->content,'\n');	
-	if (new && ! endline && (ft_strchr(new->content,'\0') - endline - 1))
+	if (!g_line)
 	{
-		temp = g_line;
-		while (temp->next)
-			temp = temp->next;
-		temp->next=new;
-		return (1);
+		g_line = new;
+		return;	
 	}
-	else
-		if (!ft_edit_lst(new->content))
-			return (0);
-	return (1);
+	temp = g_line;
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
 }
 
-static char	*ft_nltrim(char *str)
+int	ft_strchr(char *str, char c)
 {
-	char	*s;
-	int		i;
-	int		t_len;
+	int	i;
 	
+	if (!str)
+		return (0);
 	i = 0;
-	t_len = ft_strchr(str,'\n');
-	s = malloc(sizeof(char) * t_len);
-	if (!s)
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	if (str[i] == c);
+		return (i);
+	return (0);
+}
+
+int ft_check_nline(char *str)
+{
+	int	i;
+	
+	if (!str)
+		return (0);
+	if (str[0] == '\n')
+		return(1);
+	while (str[i])
+	{
+		if (str[i] == (char)10)
+			return (i);
+		printf("--%d->\t",i);
+		i++;
+	}
+	return(i);
+}
+
+
+
+static char	*ft_strjoin(char *s1, char *s2, int len)
+{
+	char	*tmp;
+	int		j;
+	int 	i;
+	char	*str;
+	j = -1;
+	i = 0;
+	tmp = malloc(sizeof(char) * (len + ft_strchr(s1, '\0') + 1));
+	printf("---%d---s1:%s,s2%s",len + ft_strchr(s1, '\0') + 1,s1,s2);
+	if (!tmp)
 		return (NULL);
-	while (i < t_len)
-		s[i] = str[i++];
-	s[i] = '\0';
-	free(str);
-	return (s);  
+	str = tmp;
+	while (s1 && s1[i])
+	{
+		tmp[i] =  s1[i];
+		printf("\n---%c--\n",tmp[i]);
+		i++;
+	}
+	while (s2 && s2[++j] && j < len)
+	{
+		tmp[i + j] =  s2[j];
+		printf("\n---%c--\n",tmp[i + j]);
+	}
+	if (s2 && s2[j] && s2[j] == '\n')
+		tmp[i + j++] = '\n';
+	tmp[i + j] = '\0';
+	return (str);
 }
 
 static int	ft_edit_lst(char *str)
 {
+	char	*s;
+	g_next	*new;
+	int		r_str;
 	
+	s = NULL;
+	if (g_line)
+		s = g_line->content;
+	printf("\n---------%d----------\n",ft_check_nline(str));
+	s = ft_strjoin(s, str, ft_check_nline(str));
+	printf("\n----joined string:%s-----\n",s);
+	if (!s)
+		return (0);
+	new = ft_lstnew(s);
+	if (!new)
+		return (0);
+	ft_lstadd_back(new);
+	r_str = ft_strchr(str, '\n');
+	if (r_str + 1 == ft_strchr(str,'\0'))
+	{
+		new = ft_lstnew(str + r_str + 1);
+		if(!new)
+			return(0);
+		ft_lstadd_back(new);
+	}
+	return (1);
 }
-ft_strjoin();
-ft_strchr();
 
-char *get_next_line(int fd)
+ char	*get_next_line(int fd)
 {
+	int		b_read;
+	char	str[BUFFER_SIZE + 1];
 
+	if (fd < 0 || fd > 512 || !BUFFER_SIZE)
+		return (NULL);
+	if (g_line)
+		ft_del_head();
+	b_read = read(fd, str, BUFFER_SIZE);
+	if (b_read < 0)
+		return (NULL);
+	while (b_read > 0)
+	{
+		str[BUFFER_SIZE] = '\0';
+		printf("\n----buffer:%s----\n",str);
+		if (ft_edit_lst(str) && ft_strchr(g_line->content,'\n'))
+			return(g_line->content);
+		b_read = read(fd, str, BUFFER_SIZE);
+	}
+	if (g_line)
+		return (g_line->content);
+	return (NULL);
 }
 
 int main(void)
@@ -105,7 +205,9 @@ int main(void)
 		return 1;
 	}
 	line = get_next_line(fd);
-	printf("\n=======s:==========%s=======len : %ld====\n",line,ft_strlen(line));
+	printf("\n=======s:==========%s=======len : %ld====\n",line,strlen(line));
+ 		line = get_next_line(fd);
+	printf("\n=======s:==========%s=======len : %ld====\n",line,strlen(line));
     free(line);
     close(fd);
     return 0;

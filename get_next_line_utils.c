@@ -1,26 +1,24 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/21 10:17:19 by aghergho          #+#    #+#             */
-/*   Updated: 2023/11/24 09:19:52 by ddos             ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-int is_endline(char *str)
+t_list	*ft_lstlast(t_list *lst)
 {
-    int	i;
+	if (!lst)
+	{
+		return (NULL);
+	}
+	while (lst -> next)
+	{
+		lst = lst -> next;
+	}
+	return (lst);
+}
 
-	if (!str)
-		return (0);
-	i = -1;
-	while (str[++i])
-		if (str[i] ==  '\n')
-			return (1);
-	return (0);
+void free_list(t_list *list)
+{
+    while (list)
+    {
+        t_list *temp = list;
+        list = list->next;
+        free(temp);
+    }
 }

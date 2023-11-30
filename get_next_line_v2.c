@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/22 13:24:07 by aghergho          #+#    #+#             */
-/*   Updated: 2023/11/28 19:44:25 by ddos             ###   ########.fr       */
+/*   Updated: 2023/11/29 11:12:45 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_strchr(char *str, char c)
 			return (i);
 		i++;
 	}
-	if (str[i] == c);
+	if ('\0' == c);
 		return (i);
 	return (0);
 }
@@ -95,13 +95,13 @@ int ft_check_nline(char *str)
 	
 	if (!str)
 		return (0);
+	i = 0;
 	if (str[0] == '\n')
 		return(1);
 	while (str[i])
 	{
-		if (str[i] == (char)10)
+		if (str[i] == (char)10 || str[i] ==  EOF)
 			return (i);
-		printf("--%d->\t",i);
 		i++;
 	}
 	return(i);
@@ -125,14 +125,10 @@ static char	*ft_strjoin(char *s1, char *s2, int len)
 	while (s1 && s1[i])
 	{
 		tmp[i] =  s1[i];
-		printf("\n---%c--\n",tmp[i]);
 		i++;
 	}
 	while (s2 && s2[++j] && j < len)
-	{
 		tmp[i + j] =  s2[j];
-		printf("\n---%c--\n",tmp[i + j]);
-	}
 	if (s2 && s2[j] && s2[j] == '\n')
 		tmp[i + j++] = '\n';
 	tmp[i + j] = '\0';
@@ -145,10 +141,17 @@ static int	ft_edit_lst(char *str)
 	g_next	*new;
 	int		r_str;
 	
+	printf("\n(: Error SEGFAULT :)\n");
+	
 	s = NULL;
 	if (g_line)
 		s = g_line->content;
+	printf("\n(: Error SEGFAULT :)\n");
+		
 	printf("\n---------%d----------\n",ft_check_nline(str));
+	r_str = ft_strchr(str, '\n');
+	printf("\n(: Error SEGFAULT :)\n");
+	
 	s = ft_strjoin(s, str, ft_check_nline(str));
 	printf("\n----joined string:%s-----\n",s);
 	if (!s)
@@ -157,12 +160,13 @@ static int	ft_edit_lst(char *str)
 	if (!new)
 		return (0);
 	ft_lstadd_back(new);
-	r_str = ft_strchr(str, '\n');
-	if (r_str + 1 == ft_strchr(str,'\0'))
+	if (r_str + 1 != ft_strchr(str,'\0'))
 	{
+		 printf("\nSEGV 32\n") ;
 		new = ft_lstnew(str + r_str + 1);
 		if(!new)
 			return(0);
+		printf("\nold s:%d-----new:%s\n",r_str+1 ,new->content);
 		ft_lstadd_back(new);
 	}
 	return (1);
@@ -184,8 +188,12 @@ static int	ft_edit_lst(char *str)
 	{
 		str[BUFFER_SIZE] = '\0';
 		printf("\n----buffer:%s----\n",str);
-		if (ft_edit_lst(str) && ft_strchr(g_line->content,'\n'))
-			return(g_line->content);
+		if (ft_edit_lst(str) )
+		{	
+			printf("Error SEGFAULT");
+			if (ft_strchr(g_line->content,'\n'))
+				return(g_line->content);
+		}
 		b_read = read(fd, str, BUFFER_SIZE);
 	}
 	if (g_line)
@@ -201,14 +209,11 @@ int main(void)
 	fd = open("test", O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error opening file");
+		perror("Error SEGFAULT");
 		return 1;
 	}
-	line = get_next_line(fd);
-	printf("\n=======s:==========%s=======len : %ld====\n",line,strlen(line));
- 		line = get_next_line(fd);
-	printf("\n=======s:==========%s=======len : %ld====\n",line,strlen(line));
-    free(line);
+	while( (line = get_next_line(fd)) != NULL)
+		printf("\n=======s:==========%s===========\n",line);
     close(fd);
     return 0;
 }

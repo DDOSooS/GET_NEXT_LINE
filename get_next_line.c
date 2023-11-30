@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/29 11:28:57 by ddos              #+#    #+#             */
-/*   Updated: 2023/11/30 06:07:05 by ddos             ###   ########.fr       */
+/*   Updated: 2023/11/30 06:35:18 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ char    *str_join(char *s1, char *s2)
     int     i;
     int     j;
     
-	printf("\n---------------str_join-------------------\n--s1:%s,s2:%s\n",s1,s2);
+	printf("\n---------------str_join-------------------\n--s1:%s,s2:%s======\n",s1,s2);
     i = ft_strlen(s1);
     j = check_end_line(s2);
 	// printf("\ncheck end of lien | file %d\n",j);
@@ -148,9 +148,9 @@ int     update_node(char *str)
 	// if (g_line->n_line)
 	// 	g_line->current = g_line->n_line;
 	// printf("\n---g_Current:%s---\n",g_line->current);
-	if (check_end_line(g_line->n_line) && check_end_line(g_line->current))
+	if (check_end_line(g_line->n_line) )
 		g_line->current = NULL;
-	else if (g_line->n_line)
+	else
 		g_line->current = g_line->n_line;	
 	s = str_join(g_line->current, str);
 	if (!s)
@@ -188,7 +188,7 @@ int ft_gen_node()
 
 char *get_next_line(int fd)
 {
-	char	buf[BUFFER_SIZE];
+	char	buf[BUFFER_SIZE + 1];
 	int		b_read;
 	
 	if (fd < 0 || fd > 512 || BUFFER_SIZE <= 0)
@@ -196,12 +196,10 @@ char *get_next_line(int fd)
 	if (!g_line)
 		if (!ft_gen_node())
 			return (NULL);
-	while (!check_end_line(g_line->current))
+	while (read(fd, buf, BUFFER_SIZE) > 0)
 	{
-		if (read(fd, buf, BUFFER_SIZE) <= 0)
-			return (NULL);
 		buf[BUFFER_SIZE] = '\0';
-		printf("\nbufer===================================\n:str%s\n======\n",buf);
+		printf("\n==================================================\nbufer:%s======\n",buf);
 		if (! update_node(buf))
 			return (NULL);
 		if (check_end_line(g_line->current))
@@ -233,7 +231,7 @@ int main() {
 	{
 		if (line == NULL)
 			break;
-		printf("\n================================================\nline %d:%s=============================\n",++i,line);
+		printf("\nline %d:%s",++i,line);
 	}
     // Perform operations with the read line
 

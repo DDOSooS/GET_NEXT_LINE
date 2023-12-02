@@ -58,7 +58,8 @@
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
     "get_next_line.h": "c",
-    "*.tcc": "c"
+    "*.tcc": "c",
+    "GET_NEXT_LINE.C": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

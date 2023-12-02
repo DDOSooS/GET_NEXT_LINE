@@ -1,9 +1,8 @@
-test1 and test 2 are
-test2
-test3
-test4
-test5
-test6
-test7
-test8
-test9
+char	*edit_line(char *str, int len, int fd)
+{
+	char	*rest;
+	char	*s;
+
+    // printf("\n===str :%s=len:%d\n",str,len);
+	s = str_sub(str, len);
+    // printf("\n==s:%s\n",s);

@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:15:41 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/02 18:29:48 by ddos             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:23:01 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,3 @@
 char *get_next_line(int fd);
 
 #endif
-// typedef struct	get_next_line
-// {
-// 	char					*current;
-// 	char					*n_line;
-// }	g_next;

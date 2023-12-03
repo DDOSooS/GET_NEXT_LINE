@@ -6,17 +6,17 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/02 18:29:32 by ddos             ###   ########.fr       */
+/*   Updated: 2023/12/03 15:29:21 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char *line[FD_MAX];
+static char	*line[FD_MAX];
 
 int	ft_strlen(char *str)
 {
-	int     i;
+	int	i;
 
 	if (!str)
 		return (0);
@@ -29,7 +29,7 @@ int	ft_strlen(char *str)
 //checking the end_of_line
 int	check_end_line(char *str)
 {
-	int     i;
+	int	i;
 
 	i = 0;
 	if (!str)
@@ -48,8 +48,8 @@ int	check_end_line(char *str)
 //substring the str
 char	*str_sub(char *str, int len)
 {    
-	char    *s;
-	int     i;
+	char	*s;
+	int		i;
 
 	s = (char *) malloc(sizeof(char) * len + 1);
 	if (!s)
@@ -85,9 +85,9 @@ char	*edit_line(char *str, int len, int fd)
 
 char	*str_join(char *s1, char *s2)
 {
-	int     i;
-	int     j;
-	char    *str;
+	int		i;
+	int		j;
+	char	*str;
 
 	i = 0;
 	j = -1;
@@ -109,10 +109,10 @@ char	*str_join(char *s1, char *s2)
 	return (str);
 }
 
-char    *get_line(int fd)
+char	*get_line(int fd)
 {
-	char    *buffer;
-	int     b_read;
+	char	*buffer;
+	int	b_read;
 
 	buffer = (char *) malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
@@ -132,51 +132,51 @@ char    *get_line(int fd)
 	return (line[fd]);
 }
 
-char    *format_last_line(char *str,int fd)
+char	*format_last_line(char *str,int fd)
 {
-    char    *s;
-    int     i;
+    char	*s;
+    int		i;
 
-    s = (char *)malloc (ft_strlen(str) + 1);
-    if (!s)
-        return (NULL);
-    i = 0;
-    while (str && str[i])
-    {
-        s[i] = str[i];
-        i++;
-    }
+	s = (char *)malloc (ft_strlen(str) + 1);
+	if (!s)
+		return (NULL);
+	i = 0;
+	while (str && str[i])
+	{
+		s[i] = str[i];
+		i++;
+	}
 	s[i] = '\0';
 	free(line[fd]);
 	line[fd] = NULL;
 	return (s);
 }
 
-char    *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    char    *str;
-    int     e_line;
-    
-    if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
-        return (NULL);
-    str = get_line(fd);
-    if (!str)
-        return (NULL);
-    e_line = check_end_line(str);
+	char	*str;
+	int		e_line;
+
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
+		return (NULL);
+	str = get_line(fd);
+	if (!str)
+		return (NULL);
+	e_line = check_end_line(str);
 	if (e_line >= 0 && e_line + 1 != ft_strlen(str))
-    {
-        str = edit_line(str, e_line, fd);
-        if (! str)
-            return (NULL);
-    }
-    else if (e_line < 0 || (e_line == 0 && ft_strlen(str) == e_line + 1))
-        str = format_last_line(str,fd);	
-    return (str);
+	{
+		str = edit_line(str, e_line, fd);
+		if (! str)
+		return (NULL);
+	}
+	else if (e_line < 0 || (e_line == 0 && ft_strlen(str) == e_line + 1))
+		str = format_last_line(str,fd);	
+	return (str);
 }
 
-int main()
+int	main()
 {
-    int fd = open("test2", O_RDONLY);
+	int fd = open("test2", O_RDONLY);
     char *line;
 	int	i;
 

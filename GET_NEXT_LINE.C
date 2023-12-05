@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/03 15:29:21 by ddos             ###   ########.fr       */
+/*   Updated: 2023/12/05 16:10:17 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,14 +163,19 @@ char	*get_next_line(int fd)
 	if (!str)
 		return (NULL);
 	e_line = check_end_line(str);
+	// printf("\n==str :%s==len==%d==endofline==%d==is complete n_line?:%d==\n",str, ft_strlen(str),e_line,e_line + 1 != ft_strlen(str));
 	if (e_line >= 0 && e_line + 1 != ft_strlen(str))
 	{
+		printf("\npass1\n");
 		str = edit_line(str, e_line, fd);
 		if (! str)
-		return (NULL);
+			return (NULL);
 	}
-	else if (e_line < 0 || (e_line == 0 && ft_strlen(str) == e_line + 1))
+	else if (e_line < 0 || ft_strlen(str) == e_line + 1)
+	{
+		printf("\npass2\n");
 		str = format_last_line(str,fd);	
+	}
 	return (str);
 }
 
@@ -187,7 +192,9 @@ int	main()
     }
 	i = 0;
     while((line = get_next_line(fd))!= NULL)
-		printf("\n=================line %d==============\nstr:%s==",++i,line);
-    close(fd);
+	{
+		printf("\n====i:%d===s:%s===========\n",++i,line);
+	}
+	close(fd);
     return 0; // Exit the program successfully
 }

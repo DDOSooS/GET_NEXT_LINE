@@ -1,8 +1,1 @@
-char	*edit_line(char *str, int len, int fd)
-{
-	char	*rest;
-	char	*s;
 
-    // printf("\n===str :%s=len:%d\n",str,len);
-	s = str_sub(str, len);
-    // printf("\n==s:%s\n",s);

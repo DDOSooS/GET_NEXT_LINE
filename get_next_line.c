@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GET_NEXT_LINE.C                                    :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/05 16:43:34 by ddos             ###   ########.fr       */
+/*   Updated: 2023/12/09 13:51:20 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,10 @@ char	*edit_line(char *str, int len, int fd)
 {
 	char	*s;
 
-	s = NULL;
-	s = str_sub(str, len);
+	if (!len)
+		s = str_sub(str, 1);
+	else
+		s = str_sub(str, len);
 	if (!s)
 		return (NULL);
 	line[fd] = str_sub(str + len + 1, ft_strlen(str + len + 1));
@@ -80,7 +82,7 @@ char	*edit_line(char *str, int len, int fd)
 		return (NULL);
 	}
 	free (str);
-	return (s);   
+	return (s);
 }
 
 char	*str_join(char *s1, char *s2)
@@ -106,6 +108,7 @@ char	*str_join(char *s1, char *s2)
 	while (s2 && s2[++j])
 		str[i + j] = s2[j];    
 	str[i + j] = '\0';
+	// printf("\n===========str_join======\nj_str:%s====\n",str);
 	return (str);
 }
 
@@ -163,19 +166,14 @@ char	*get_next_line(int fd)
 	if (!str)
 		return (NULL);
 	e_line = check_end_line(str);
-	// printf("\n==str :%s==len==%d==endofline==%d==is complete n_line?:%d==\n",str, ft_strlen(str),e_line,e_line + 1 != ft_strlen(str));
 	if (e_line >= 0 && e_line + 1 != ft_strlen(str))
 	{
-		printf("\npass1\n");
 		str = edit_line(str, e_line, fd);
 		if (! str)
 			return (NULL);
 	}
 	else if (e_line < 0 || ft_strlen(str) == e_line + 1)
-	{
-		printf("\npass2\n");
-		str = format_last_line(str,fd);	
-	}
+		str = format_last_line(str,fd);
 	return (str);
 }
 

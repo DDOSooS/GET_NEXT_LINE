@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GET_NEXT_LINE.C                                    :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/05 21:22:02 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:18:55 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ char	*get_lin(int fd)
 	{
 		buffer[b_read] = '\0';
 		g_line = str_join(g_line, buffer);
-		if (!g_line || check_end_line(g_line) >= 0
-			|| b_read < BUFFER_SIZE)
+		if (!g_line || check_end_line(g_line) >= 0)
 			break ;
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
@@ -116,7 +115,8 @@ char	*get_next_line(int fd)
 	char	*str;
 	int		e_line;
 
-	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024 ||
+		BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	if (! g_line)
 		g_line = NULL;

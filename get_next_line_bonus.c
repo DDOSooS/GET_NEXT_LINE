@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   GET_NEXT_LINE.C                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/05 21:22:02 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:17:19 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,7 @@ char	*get_lin(int fd)
 	{
 		buffer[b_read] = '\0';
 		g_line[fd] = str_join(g_line[fd], buffer);
-		if (!g_line[fd] || check_end_line(g_line[fd]) >= 0
-			|| b_read < BUFFER_SIZE)
+		if (!g_line[fd] || check_end_line(g_line[fd]) >= 0)
 			break ;
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
@@ -113,7 +112,8 @@ char	*get_next_line(int fd)
 	char	*str;
 	int		e_line;
 
-	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
+	if (fd < 0 || fd > 1024
+		|| BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	if (!g_line[fd])
 		g_line[fd] = NULL;
@@ -132,23 +132,27 @@ char	*get_next_line(int fd)
 	return (str);
 }
 
-// #include <string.h>
+#include <string.h>
 
-// int main()
-// {
-// 	int	fd = open("test.txt",O_RDONLY);
-// 	char	*line;
+int main()
+{
+	int	fd = open("test.txt",O_RDONLY);
+	char	*line;
+	int	fd1 = open("test1.txt", O_RDONLY);
+	
+	if (fd == -1)
+		return (0);
 
-// 	if (fd == -1)
-// 		return (0);
-// 	int	i;
-
-// 	i = 0;
-// 	while ((line = get_next_line(fd)) != NULL )
-// 	{
-// 		printf("====================%s", line);
-// 		free(line);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+	while ((line = get_next_line(fd)) != NULL )
+	{
+		printf("%s", line);
+		free(line);
+	}
+	printf("\n===========================\n");
+	while ((line = get_next_line(fd1)) != NULL )
+	{
+		printf("%s", line);
+		free(line);
+	}
+	return (0);
+}

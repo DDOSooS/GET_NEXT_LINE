@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 16:30:38 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/11 16:30:49 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:14:43 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <string.h>
+# include <limits.h>
 
 # define FD_MAX 1024
 

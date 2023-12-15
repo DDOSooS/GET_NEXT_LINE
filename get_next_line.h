@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/21 10:15:41 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/05 21:22:19 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 11:13:56 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 # define GET_NEXT_LINE_H
 
 # include <stdlib.h>
-# include <stddef.h>
 # include <fcntl.h>
-# include <stdio.h>
+# include <limits.h>
 # include <unistd.h>
 # include <string.h>
 

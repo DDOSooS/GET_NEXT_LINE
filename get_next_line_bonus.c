@@ -3,18 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/02 10:09:43 by ddos              #+#    #+#             */
-/*   Updated: 2023/12/15 11:17:19 by ddos             ###   ########.fr       */
+/*   Created: 2023/12/15 11:55:57 by aghergho          #+#    #+#             */
+/*   Updated: 2023/12/15 11:56:01 by aghergho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-static char	*g_line[FD_MAX];
-
-char	*edit_line(char *str, int len, int fd)
+char	*edit_line(char *str, int len, char **g_line)
 {
 	char	*s;
 
@@ -22,11 +20,11 @@ char	*edit_line(char *str, int len, int fd)
 	s = str_sub(str, len + 1);
 	if (!s)
 		return (NULL);
-	g_line[fd] = str_sub(str + len + 1, ft_strlen(str + len + 1));
-	if (! g_line[fd])
+	*g_line = str_sub(str + len + 1, ft_strlen(str + len + 1));
+	if (! *g_line)
 	{
 		free(s);
-		free(g_line[fd]);
+		free(*g_line);
 		return (NULL);
 	}
 	free (str);
@@ -60,7 +58,7 @@ char	*str_join(char *s1, char *s2)
 	return (str);
 }
 
-char	*get_lin(int fd)
+char	*get_lin(int fd, char *g_line)
 {
 	char	*buffer;
 	int		b_read;
@@ -72,29 +70,32 @@ char	*get_lin(int fd)
 	while (b_read > 0)
 	{
 		buffer[b_read] = '\0';
-		g_line[fd] = str_join(g_line[fd], buffer);
-		if (!g_line[fd] || check_end_line(g_line[fd]) >= 0)
+		g_line = str_join(g_line, buffer);
+		if (!g_line || check_end_line(g_line) >= 0)
 			break ;
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
-	if (!g_line[fd] || b_read == -1)
+	if (!g_line || b_read == -1)
 	{
-		free(g_line[fd]);
-		g_line[fd] = NULL;
-		return (NULL);
+		free(g_line);
+		g_line = NULL;
 	}
-	return (g_line[fd]);
+	return (g_line);
 }
 
-char	*format_last_line(char *str, int fd)
+char	*format_last_line(char *str, char **g_line)
 {
 	char	*s;
 	int		i;
 
 	s = (char *)malloc (ft_strlen(str) + 1);
 	if (!s)
+	{
+		free(g_line);
+		g_line = NULL;
 		return (NULL);
+	}
 	i = 0;
 	while (str && str[i])
 	{
@@ -102,57 +103,57 @@ char	*format_last_line(char *str, int fd)
 		i++;
 	}
 	s[i] = '\0';
-	free(g_line[fd]);
-	g_line[fd] = NULL;
+	free(*g_line);
+	*g_line = NULL;
 	return (s);
 }
 
 char	*get_next_line(int fd)
 {
-	char	*str;
-	int		e_line;
+	static char	*line[FD_MAX];
+	char		*str;
+	int			e_line;
 
-	if (fd < 0 || fd > 1024
-		|| BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
+	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
-	if (!g_line[fd])
-		g_line[fd] = NULL;
-	str = get_lin(fd);
+	str = get_lin(fd, line[fd]);
 	if (!str)
 		return (NULL);
 	e_line = check_end_line(str);
 	if (e_line >= 0 && e_line + 1 != ft_strlen(str))
 	{
-		str = edit_line(str, e_line, fd);
+		str = edit_line(str, e_line, &line[fd]);
 		if (! str)
 			return (NULL);
 	}
-	else if (e_line < 0 || ft_strlen(str) == e_line + 1)
-		str = format_last_line(str, fd);
+	else if ((e_line < 0 || ft_strlen(str) == e_line + 1) && line[fd])
+		str = format_last_line(str, &line[fd]);
 	return (str);
 }
 
-#include <string.h>
+/*============testing part==================
 
+#include <stdio.h>
 int main()
 {
-	int	fd = open("test.txt",O_RDONLY);
+	int	fd = open("test4.txt",O_RDONLY);
 	char	*line;
-	int	fd1 = open("test1.txt", O_RDONLY);
-	
-	if (fd == -1)
-		return (0);
-
+	int	i;
+	i = 0;
 	while ((line = get_next_line(fd)) != NULL )
 	{
 		printf("%s", line);
 		free(line);
+		i++;
 	}
-	printf("\n===========================\n");
-	while ((line = get_next_line(fd1)) != NULL )
+	printf("\n===============================\n");
+	int	fd2 = open("test5.txt",O_RDONLY);
+	while ((line = get_next_line(fd2)) != NULL )
 	{
 		printf("%s", line);
 		free(line);
+		i++;
 	}
 	return (0);
 }
+//*/

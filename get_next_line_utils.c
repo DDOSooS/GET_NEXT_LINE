@@ -52,7 +52,7 @@ int	check_end_line(char *str)
 	i = 0;
 	if (!str)
 		return (-1);
-	if (str[0] == '\n' || str[i] == EOF)
+	if (str[0] == '\n')
 		return (0);
 	while (str[i])
 	{

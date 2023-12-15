@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/11 16:31:26 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/11 16:31:29 by aghergho         ###   ########.fr       */
+/*   Created: 2023/12/11 15:57:30 by aghergho          #+#    #+#             */
+/*   Updated: 2023/12/11 15:59:04 by aghergho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*str_sub(char *str, int len)
 {

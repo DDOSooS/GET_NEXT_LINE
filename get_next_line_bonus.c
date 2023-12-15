@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-static char	*g_line;
+static char	*g_line[FD_MAX];
 
-char	*edit_line(char *str, int len)
+char	*edit_line(char *str, int len, int fd)
 {
 	char	*s;
 
@@ -22,11 +22,11 @@ char	*edit_line(char *str, int len)
 	s = str_sub(str, len + 1);
 	if (!s)
 		return (NULL);
-	g_line = str_sub(str + len + 1, ft_strlen(str + len + 1));
-	if (! g_line)
+	g_line[fd] = str_sub(str + len + 1, ft_strlen(str + len + 1));
+	if (! g_line[fd])
 	{
 		free(s);
-		free(g_line);
+		free(g_line[fd]);
 		return (NULL);
 	}
 	free (str);
@@ -72,33 +72,30 @@ char	*get_lin(int fd)
 	while (b_read > 0)
 	{
 		buffer[b_read] = '\0';
-		g_line = str_join(g_line, buffer);
-		if (!g_line || check_end_line(g_line) >= 0
+		g_line[fd] = str_join(g_line[fd], buffer);
+		if (!g_line[fd] || check_end_line(g_line[fd]) >= 0
 			|| b_read < BUFFER_SIZE)
 			break ;
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
-	if (!g_line || b_read == -1)
+	if (!g_line[fd] || b_read == -1)
 	{
-		free(g_line);
-		g_line = NULL;
+		free(g_line[fd]);
+		g_line[fd] = NULL;
+		return (NULL);
 	}
-	return (g_line);
+	return (g_line[fd]);
 }
 
-char	*format_last_line(char *str)
+char	*format_last_line(char *str, int fd)
 {
 	char	*s;
 	int		i;
 
 	s = (char *)malloc (ft_strlen(str) + 1);
 	if (!s)
-	{
-		free(g_line);
-		g_line = NULL;
 		return (NULL);
-	}
 	i = 0;
 	while (str && str[i])
 	{
@@ -106,8 +103,8 @@ char	*format_last_line(char *str)
 		i++;
 	}
 	s[i] = '\0';
-	free(g_line);
-	g_line = NULL;
+	free(g_line[fd]);
+	g_line[fd] = NULL;
 	return (s);
 }
 
@@ -118,20 +115,20 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (! g_line)
-		g_line = NULL;
+	if (!g_line[fd])
+		g_line[fd] = NULL;
 	str = get_lin(fd);
 	if (!str)
 		return (NULL);
 	e_line = check_end_line(str);
 	if (e_line >= 0 && e_line + 1 != ft_strlen(str))
 	{
-		str = edit_line(str, e_line);
+		str = edit_line(str, e_line, fd);
 		if (! str)
 			return (NULL);
 	}
 	else if (e_line < 0 || ft_strlen(str) == e_line + 1)
-		str = format_last_line(str);
+		str = format_last_line(str, fd);
 	return (str);
 }
 
@@ -139,13 +136,15 @@ char	*get_next_line(int fd)
 
 // int main()
 // {
-// 	int	fd = open("test4.txt",O_RDONLY);
+// 	int	fd = open("test.txt",O_RDONLY);
 // 	char	*line;
 
+// 	if (fd == -1)
+// 		return (0);
 // 	int	i;
 
 // 	i = 0;
-// (line = get_next_line(fd)) ;
+// 	while ((line = get_next_line(fd)) != NULL )
 // 	{
 // 		printf("====================%s", line);
 // 		free(line);

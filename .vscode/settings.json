@@ -59,7 +59,8 @@
   "files.associations": {
     "get_next_line.h": "c",
     "*.tcc": "c",
-    "GET_NEXT_LINE.C": "cpp"
+    "GET_NEXT_LINE.C": "cpp",
+    "stdio.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/11 15:57:30 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/11 15:59:04 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 19:23:31 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*str_sub(char *str, int len)
 {
-	char	*s;
 	int		i;
+	char	*s;
 
 	if (!len)
 		len++;

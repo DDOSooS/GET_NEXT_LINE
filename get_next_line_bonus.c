@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 11:55:57 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/15 11:56:01 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 20:13:43 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
+
+#include <stdio.h>
 
 char	*edit_line(char *str, int len, char **g_line)
 {
@@ -27,7 +29,7 @@ char	*edit_line(char *str, int len, char **g_line)
 		free(*g_line);
 		return (NULL);
 	}
-	free (str);
+	free(str);
 	return (s);
 }
 
@@ -57,6 +59,7 @@ char	*str_join(char *s1, char *s2)
 	free(s1);
 	return (str);
 }
+
 
 char	*get_lin(int fd, char *g_line)
 {
@@ -133,20 +136,19 @@ char	*get_next_line(int fd)
 
 /*============testing part==================
 
-#include <stdio.h>
 int main()
 {
 	int	fd = open("test4.txt",O_RDONLY);
 	char	*line;
 	int	i;
 	i = 0;
-	while ((line = get_next_line(fd)) != NULL )
+	while ((line = get_next_line(fd)) != NULL)
 	{
 		printf("%s", line);
 		free(line);
 		i++;
 	}
-	printf("\n===============================\n");
+	printf("===============================\n");
 	int	fd2 = open("test5.txt",O_RDONLY);
 	while ((line = get_next_line(fd2)) != NULL )
 	{

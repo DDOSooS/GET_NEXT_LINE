@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aghergho <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 11:57:08 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/15 11:57:12 by aghergho         ###   ########.fr       */
+/*   Updated: 2023/12/15 20:11:59 by ddos             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,23 +130,3 @@ char	*get_next_line(int fd)
 		str = format_last_line(str, &line);
 	return (str);
 }
-
-/*============testing part==================
-
-#include <stdio.h>
-int main()
-{
-	int	fd = open("test4.txt",O_RDONLY);
-	char	*line;
-	int	i;
-	i = 0;
-	while ((line = get_next_line(fd)) != NULL )
-	{
-		printf("%s", line);
-		free(line);
-		i++;
-	}
-	printf("\n===============================\n");
-	return (0);
-}
-//*/

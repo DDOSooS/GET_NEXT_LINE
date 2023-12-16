@@ -84,30 +84,6 @@ char	*get_lin(int fd, char *g_line)
 	return (g_line);
 }
 
-char	*format_last_line(char *str, char **g_line)
-{
-	char	*s;
-	int		i;
-
-	s = (char *)malloc (ft_strlen(str) + 1);
-	if (!s)
-	{
-		free(g_line);
-		g_line = NULL;
-		return (NULL);
-	}
-	i = 0;
-	while (str && str[i])
-	{
-		s[i] = str[i];
-		i++;
-	}
-	s[i] = '\0';
-	free(*g_line);
-	*g_line = NULL;
-	return (s);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	*line;
@@ -127,6 +103,6 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	else if ((e_line < 0 || ft_strlen(str) == e_line + 1) && line)
-		str = format_last_line(str, &line);
+		line = NULL;
 	return (str);
 }

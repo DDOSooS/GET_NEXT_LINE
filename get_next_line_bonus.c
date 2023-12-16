@@ -30,6 +30,7 @@ char	*edit_line(char *str, int len, char **g_line)
 		return (NULL);
 	}
 	free(str);
+	str = NULL ;
 	return (s);
 }
 
@@ -60,7 +61,6 @@ char	*str_join(char *s1, char *s2)
 	return (str);
 }
 
-
 char	*get_lin(int fd, char *g_line)
 {
 	char	*buffer;
@@ -87,30 +87,6 @@ char	*get_lin(int fd, char *g_line)
 	return (g_line);
 }
 
-char	*format_last_line(char *str, char **g_line)
-{
-	char	*s;
-	int		i;
-
-	s = (char *)malloc (ft_strlen(str) + 1);
-	if (!s)
-	{
-		free(g_line);
-		g_line = NULL;
-		return (NULL);
-	}
-	i = 0;
-	while (str && str[i])
-	{
-		s[i] = str[i];
-		i++;
-	}
-	s[i] = '\0';
-	free(*g_line);
-	*g_line = NULL;
-	return (s);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	*line[FD_MAX];
@@ -130,7 +106,7 @@ char	*get_next_line(int fd)
 			return (NULL);
 	}
 	else if ((e_line < 0 || ft_strlen(str) == e_line + 1) && line[fd])
-		str = format_last_line(str, &line[fd]);
+		line[fd] = NULL;
 	return (str);
 }
 
@@ -142,20 +118,21 @@ int main()
 	char	*line;
 	int	i;
 	i = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	while ((line = get_next_line(fd)) != NULL && i < 6)
 	{
 		printf("%s", line);
 		free(line);
 		i++;
 	}
-	printf("===============================\n");
-	int	fd2 = open("test5.txt",O_RDONLY);
-	while ((line = get_next_line(fd2)) != NULL )
-	{
-		printf("%s", line);
-		free(line);
-		i++;
-	}
+	printf("\n");
+	// int	fd2 = open("test5.txt",O_RDONLY);
+	// while ((line = get_next_line(fd2)) != NULL )
+	// {
+	// 	printf("%s", line);
+	// 	free(line);
+	// 	i++;
+	// }
+	// printf("===============================\n");
 	return (0);
 }
 //*/

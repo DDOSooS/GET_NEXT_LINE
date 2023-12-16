@@ -76,7 +76,7 @@ char	*get_lin(int fd, char *g_line)
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
-	if (!g_line || b_read == -1)
+	if ((!g_line || b_read == -1) && !b_read)
 	{
 		free(g_line);
 		g_line = NULL;

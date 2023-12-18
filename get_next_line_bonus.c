@@ -6,7 +6,7 @@
 /*   By: ddos <ddos@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 11:55:57 by aghergho          #+#    #+#             */
-/*   Updated: 2023/12/15 20:13:43 by ddos             ###   ########.fr       */
+/*   Updated: 2023/12/18 08:49:37 by aghergho         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	*get_lin(int fd, char *g_line)
 		b_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
-	if ((!g_line || b_read == -1) && !b_read)
+	if (!g_line && b_read != 0)
 	{
 		free(g_line);
 		g_line = NULL;
@@ -91,7 +91,7 @@ char	*get_next_line(int fd)
 	char		*str;
 	int			e_line;
 
-	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
+	if (fd < 0 || BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
 		return (NULL);
 	str = get_lin(fd, line[fd]);
 	if (!str)
